@@ -1,16 +1,19 @@
 package InformedSearch;
 
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class Puzzle {
 
-    public boolean aStarSearch(Node start,Node goal){
+    public boolean aStarSearchHamming(Node start,Node goal){
         PriorityQueue<Node> closedSet = new PriorityQueue<>();
         PriorityQueue<Node> openSet = new PriorityQueue<>();
+        Heuristics hr = new Heuristics();
+        ArrayList<Node> neighbors = new ArrayList<>();
 
         openSet.add(start);
         start.g_score = 0;
-        start.f_score = start.g_score;// + Hamming(start,goal);
+        start.f_score = start.g_score + hr.Hamming(start,goal);
 
         while(!openSet.isEmpty()){
             Node current = openSet.remove();
@@ -18,7 +21,20 @@ public class Puzzle {
                 return true;//////////////// kaj ache
             }
             closedSet.add(current);
-            ///how do i find the neighbours??
+            neighbors = hr.getNeighbors(start);
+            for( Node neighbor : neighbors){
+                if(closedSet.contains(neighbor)) continue;
+                int tentative_score = current.g_score + 1;
+
+                if(!openSet.contains(neighbor) || tentative_score<neighbor.g_score){
+                    neighbor.came_from = current;
+                    neighbor.g_score = tentative_score;
+                    neighbor.f_score = neighbor.g_score + hr.Hamming(neighbor,goal);
+                    if(!openSet.contains(neighbor)){
+                        openSet.add(neighbor);
+                    }
+                }
+            }
 
         }
         return false;

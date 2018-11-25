@@ -5,6 +5,7 @@ package InformedSearch;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainPuzzle {
@@ -14,9 +15,9 @@ public class MainPuzzle {
         //File file = new File("/home/asif/Asif/Study/L-3,T-2/CSE 318 Artificial Intelligence Sessional/Offline2/src/InformedSearch/");
         //BufferedReader sc = new BufferedReader(new FileReader(file));
         int n = sc.nextInt();
-        int length = n*n;
         int matrix[][] = new int[n][n];
         int matrix2[][] = new int[n][n];
+        ArrayList<Node> list = new ArrayList<>();
         for(int i =0 ; i<n ; i++){
             for(int j = 0; j<n;j++){
                 matrix[i][j] = sc.nextInt();
@@ -34,12 +35,22 @@ public class MainPuzzle {
         Heuristics hr = new Heuristics();
         hr.Hamming(node,node2);
         hr.Manhattan(node);
+        list = hr.getNeighbors(node);
+        for(Node nude : list){
+            int a[][] = nude.matrix;
+            for(int i =0 ; i<n;i++){
+                for(int j =0 ; j<n ; j++){
+                    System.out.print(a[i][j]+" ");
+                }
+                System.out.println();
+            }
+        }
 
         Puzzle puzzle = new Puzzle();
         boolean b = puzzle.isPossible(node);
         if(b == false) System.out.println("This puzzle is unsolvable!!!");
         else{
-            puzzle.aStarSearch(node,node2);
+            //puzzle.aStarSearch(node,node2);
         }
         System.out.println(b);
     }
